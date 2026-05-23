@@ -6,7 +6,16 @@ import java.time.Instant;
 
 @Service
 public class AlertService {
+
+    private final AlertLogService alertLogService;
+
+    public AlertService(AlertLogService alertLogService) {
+        this.alertLogService = alertLogService;
+    }
+
     public void fireAlert(Monitor monitor) {
-        System.out.println("{\"ALERT\": \"Device " + monitor.getId() + " is down!\", \"time\": \"" + Instant.now() + "\", \"email\": \"" + monitor.getAlertEmail() + "\"}");
+        String message = "Device " + monitor.getId() + " is down!";
+        System.out.println("{\"ALERT\": \"" + message + "\", \"time\": \"" + Instant.now() + "\", \"email\": \"" + monitor.getAlertEmail() + "\"}");
+        alertLogService.log(monitor.getId(), message);
     }
 }
